@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUKS - Instant Banking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: #1a1a2e;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            border-radius: 35px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen-content {
+            height: 100%;
+            overflow-y: auto;
+            padding-bottom: 90px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 24px;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            padding: 20px 24px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0 0 35px 35px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .notification-icon:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
+        }
+
+        .balance-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .balance-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .action-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: 25px 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .quick-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quick-btn:hover {
+            transform: translateY(-5px);
+        }
+
+        .quick-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .quick-btn:hover .quick-icon {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .quick-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        /* VIP Tasks Section */
+        .vip-section {
+            padding: 0 24px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .countdown {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5); }
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .task-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.05));
+            pointer-events: none;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .task-name {
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 16px;
+        }
+
+        .task-reward {
+            color: #667eea;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .task-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .claim-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .claim-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .claim-btn:hover::after {
+            left: 100%;
+        }
+
+        .claim-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .claim-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Transfer Section */
+        .transfer-section {
+            padding: 20px 24px;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .transfer-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .transfer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .transfer-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #1a1a2e;
+        }
+
+        .close-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #e0e0e0;
+            transform: rotate(90deg);
+        }
+
+        .bank-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #e8e8e8;
+            border-radius: 16px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #aaa;
+        }
+
+        .cashback-preview {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 18px;
+            border-radius: 16px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 2px solid #4caf50;
+        }
+
+        .cashback-text {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        /* PIN Modal */
+        .pin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+        }
+
+        .pin-modal.active {
+            display: flex;
+        }
+
+        .pin-container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 340px;
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(60px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .pin-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #1a1a2e;
+        }
+
+        .pin-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .pin-display {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 35px;
+        }
+
+        .pin-dot {
+            width: 16px;
+            height: 16px;
+            border: 3px solid #e0e0e0;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .pin-dot.filled {
+            background: #667eea;
+            border-color: #667eea;
+            transform: scale(1.2);
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .key {
+            aspect-ratio: 1;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .key:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .key:active {
+            transform: scale(0.95);
+        }
+
+        .key.special {
+            background: #ffebee;
+            color: #f44336;
+        }
+
+        .key.special:hover {
+            background: #f44336;
+            color: white;
+        }
+
+        .key.success {
+            background: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .key.success:hover {
+            background: #4caf50;
+            color: white;
+        }
+
+        /* Success Screen */
+        .success-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 2000;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-screen.active {
+            display: flex;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .success-icon {
+            width: 140px;
+            height: 140px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            margin-bottom: 30px;
+            animation: scaleIn 0.6s ease-out;
+            border: 4px solid rgba(255,255,255,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-text {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .success-subtext {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .cashback-box {
+            background: rgba(255,255,255,0.2);
+            padding: 25px 40px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 40px;
+        }
+
+        .cashback-label {
+            font-size: 14px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .cashback-amount {
+            font-size: 42px;
+            font-weight: 800;
+        }
+
+        .done-btn {
+            padding: 18px 50px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .done-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 18px 0 30px;
+            box-shadow: 0 -5px 30px rgba(0,0,0,0.08);
+            border-radius: 30px 30px 0 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #999;
+            padding: 0 20px;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+            transform: translateY(-5px);
+        }
+
+        .nav-icon {
+            font-size: 26px;
+            transition: all 0.3s;
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.2);
+        }
+
+        .nav-label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Cashback Badge */
+        .cashback-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+            animation: bounce 2s infinite;
+            border: 2px solid white;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Scrollbar */
+        .screen-content::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="screen-content">
+                <!-- Status Bar -->
+                <div class="status-bar">
+                    <span>9:41</span>
+                    <span>5G 100%</span>
+                </div>
+
+                <!-- Header -->
+                <div class="header">
+                    <div class="header-top">
+                        <div class="logo">👁️ MUKS</div>
+                        <div class="notification-icon">🔔</div>
+                    </div>
+                    <div class="balance-card">
+                        <div class="balance-label">Available Balance</div>
+                        <div class="balance-amount">UGX2,450,000.0</div>
+                        <div class="balance-actions">
+                            <button class="action-btn" onclick="showTransfer()">Send Money</button>
+                            <button class="action-btn" onclick="showWithdraw()">Withdraw</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <div class="quick-btn" onclick="showToast('Airtime coming soon')">
+                        <div class="quick-icon" style="background: #e3f2fd;">📱</div>
+                        <span class="quick-label">Airtime</span>
+                    </div>
+                    <div class="quick-btn" onclick="showToast('Data coming soon')">
+                        <div class="quick-icon" style="background: #f3e5f5;">📡</div>
+                        <span class="quick-label">Data</span>
+                    </div>
+                    <div class="quick-btn" onclick="showToast('Bills coming soon')">
+                        <div class="quick-icon" style="background: #e8f5e9;">⚡</div>
+                        <span class="quick-label">Bills</span>
+                    </div>
+                    <div class="quick-btn" style="position: relative;" onclick="showToast('Cashback earned: UGX12,500 this month')">
+                        <div class="quick-icon" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);">🎁</div>
+                        <span class="cashback-badge">+UGX500</span>
+                        <span class="quick-label">Cashback</span>
+                    </div>
+                </div>
+
+                <!-- VIP Tasks -->
+                <div class="vip-section" id="dashboard">
+                    <div class="section-header">
+                        <h2 class="section-title">🔥 VIP Tasks</h2>
+                        <span class="countdown" id="countdown">Next: 6s</span>
+                    </div>
+
+                    <div class="task-card">
+                        <div class="task-header">
+                            <span class="task-name">Daily Login Bonus</span>
+                            <span class="task-reward">UGX10,000</span>
+                        </div>
+                        <div class="task-desc">Open the app and claim your daily reward instantly</div>
+                        <button class="claim-btn" onclick="claimTask(this, 10000)">Claim Now</button>
+                    </div>
+
+                    <div class="task-card">
+                        <div class="task-header">
+                            <span class="task-name">Transfer Master</span>
+                            <span class="task-reward">UGX25,000</span>
+                        </div>
+                        <div class="task-desc">Complete 5 transfers to MTM MOMO accounts this week</div>
+                        <button class="claim-btn" onclick="claimTask(this, 25000)">Claim Now</button>
+                    </div>
+
+                    <div class="task-card">
+                        <div class="task-header">
+                            <span class="task-name">Savings Champion</span>
+                            <span class="task-reward">UGX50,000</span>
+                        </div>
+                        <div class="task-desc">Maintain a balance of UGX100,000+ for 7 consecutive days</div>
+                        <button class="claim-btn" onclick="claimTask(this, 50000)">Claim Now</button>
+                    </div>
+
+                    <div class="task-card">
+                        <div class="task-header">
+                            <span class="task-name">Referral Pro</span>
+                            <span class="task-reward">UGX100,000</span>
+                        </div>
+                        <div class="task-desc">Invite 3 friends who complete KYC verification</div>
+                        <button class="claim-btn" onclick="claimTask(this, 100000)">Claim Now</button>
+                    </div>
+                </div>
+
+                <!-- Transfer Section -->
+                <div class="transfer-section" id="transferSection">
+                    <div class="transfer-header">
+                        <h2 class="transfer-title">Send Money</h2>
+                        <button class="close-btn" onclick="showDashboard()">✕</button>
+                    </div>
+
+                    <div class="bank-badge">
+                        <span>🏦</span>
+                        <span>MTN MOMO Bank Only</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Account Number</label>
+                        <input type="text" class="input-field" id="accountNumber" placeholder="Enter 10-digit MTN MOMO account" maxlength="10" oninput="validateAccount(this)">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Account Name</label>
+                        <input type="text" class="input-field" id="accountName" placeholder="Account holder name will appear here" readonly style="background: #f5f5f5; color: #666;">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Amount (UGX1,000 - UGX300M)</label>
+                        <input type="number" class="input-field" id="amount" placeholder="Enter amount" min="1000" max="300000000" oninput="calculateCashback(this)">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Narration (Optional)</label>
+                        <input type="text" class="input-field" placeholder="What's this payment for?">
+                    </div>
+
+                    <div class="cashback-preview" id="cashbackPreview" style="display: none;">
+                        <span class="cashback-text">🎉 You'll earn <strong id="cashbackAmount">UGX0</strong> cashback instantly!</span>
+                    </div>
+
+                    <button class="claim-btn" style="margin-top: 25px;" onclick="showPinModal()">
+                        Send Money Instantly ⚡
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="switchTab(this, 'home')">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item" onclick="switchTab(this, 'transfer')">
+                    <span class="nav-icon">💸</span>
+                    <span class="nav-label">Send</span>
+                </div>
+                <div class="nav-item" onclick="switchTab(this, 'history')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">History</span>
+                </div>
+                <div class="nav-item" onclick="switchTab(this, 'profile')">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-label">Profile</span>
+                </div>
+            </div>
+
+            <!-- PIN Modal -->
+            <div class="pin-modal" id="pinModal">
+                <div class="pin-container">
+                    <h3 class="pin-title">Enter PIN</h3>
+                    <p class="pin-subtitle">Confirm transfer of <strong id="pinAmount">UGX0</strong></p>
+                    <div class="pin-display">
+                        <div class="pin-dot" id="dot1"></div>
+                        <div class="pin-dot" id="dot2"></div>
+                        <div class="pin-dot" id="dot3"></div>
+                        <div class="pin-dot" id="dot4"></div>
+                        <div class="pin-dot" id="dot5"></div>
+                        <div class="pin-dot" id="dot6"></div>
+                    </div>
+                    <div class="keypad">
+                        <button class="key" onclick="enterPin(1)">1</button>
+                        <button class="key" onclick="enterPin(2)">2</button>
+                        <button class="key" onclick="enterPin(3)">3</button>
+                        <button class="key" onclick="enterPin(4)">4</button>
+                        <button class="key" onclick="enterPin(5)">5</button>
+                        <button class="key" onclick="enterPin(6)">6</button>
+                        <button class="key" onclick="enterPin(7)">7</button>
+                        <button class="key" onclick="enterPin(8)">8</button>
+                        <button class="key" onclick="enterPin(9)">9</button>
+                        <button class="key special" onclick="clearPin()">✕</button>
+                        <button class="key" onclick="enterPin(0)">0</button>
+                        <button class="key success" onclick="submitPin()">✓</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Screen -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon">✓</div>
+                <div class="success-text">Transfer Complete!</div>
+                <div class="success-subtext">Arrived in 0.8 seconds ⚡</div>
+                <div class="cashback-box">
+                    <div class="cashback-label">Cashback Earned</div>
+                    <div class="cashback-amount" id="successCashback">UGX1,000</div>
+                </div>
+                <button class="done-btn" onclick="closeSuccess()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let pin = '';
+        const pinLength = 6;
+        let currentBalance = 2450000;
+        let currentCashback = 0;
+
+        // Show transfer screen
+        function showTransfer() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('transferSection').classList.add('active');
+            document.querySelector('.quick-actions').style.display = 'none';
+            document.querySelector('.section-header').style.display = 'none';
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('transferSection').classList.remove('active');
+            document.querySelector('.quick-actions').style.display = 'grid';
+            document.querySelector('.section-header').style.display = 'flex';
+            // Reset transfer form
+            document.getElementById('accountNumber').value = '';
+            document.getElementById('accountName').value = '';
+            document.getElementById('amount').value = '';
+            document.getElementById('cashbackPreview').style.display = 'none';
+        }
+
+        // Show withdraw (placeholder)
+        function showWithdraw() {
+            alert('Withdrawal feature coming in next update!');
+        }
+
+        // Switch tab
+        function switchTab(element, tab) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            if (tab === 'home') {
+                showDashboard();
+            } else if (tab === 'transfer') {
+                showTransfer();
+            } else {
+                alert(tab.charAt(0).toUpperCase() + tab.slice(1) + ' feature coming soon!');
+            }
+        }
+
+        // Validate account number (mock)
+        function validateAccount(input) {
+            const value = input.value.replace(/\D/g, '');
+            input.value = value;
+
+            if (value.length === 10) {
+                // Mock account name lookup
+                setTimeout(() => {
+                    document.getElementById('accountName').value = 'John Doe (MTN MOMO)';
+                    document.getElementById('accountName').style.color = '#1a1a2e';
+                    document.getElementById('accountName').style.fontWeight = '600';
+                }, 500);
+            } else {
+                document.getElementById('accountName').value = '';
+                document.getElementById('accountName').style.color = '#666';
+                document.getElementById('accountName').style.fontWeight = '400';
+            }
+        }
+
+        // Calculate cashback
+        function calculateCashback(input) {
+            const amount = parseFloat(input.value) || 0;
+            const cashback = Math.min(Math.floor(amount * 0.02), 5000);
+            currentCashback = cashback;
+
+            if (amount >= 1000) {
+                document.getElementById('cashbackPreview').style.display = 'flex';
+                document.getElementById('cashbackAmount').textContent = 'UGX' + cashback.toLocaleString();
+            } else {
+                document.getElementById('cashbackPreview').style.display = 'none';
+            }
+        }
+
+        // Claim task
+        function claimTask(btn, amount) {
+            btn.innerHTML = '<span class="loading"></span>';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.textContent = '✓ Claimed!';
+                btn.style.background = '#4caf50';
+
+                // Animate balance increase
+                const balanceEl = document.querySelector('.balance-amount');
+                const startBalance = currentBalance;
+                const targetBalance = currentBalance + amount;
+                const duration = 1000;
+                const startTime = performance.now();
+
+                function updateBalance(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeProgress = 1 - Math.pow(1 - progress, 3);
+                    const newBalance = Math.floor(startBalance + (targetBalance - startBalance) * easeProgress);
+
+                    balanceEl.textContent = 'UGX' + newBalance.toLocaleString() + '.00';
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateBalance);
+                    } else {
+                        currentBalance = targetBalance;
+                    }
+                }
+
+                requestAnimationFrame(updateBalance);
+
+                // Reset button after 6 seconds
+                setTimeout(() => {
+                    btn.textContent = 'Claim Now';
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 6000);
+            }, 800);
+        }
+
+        // Show PIN modal
+        function showPinModal() {
+            const amount = document.getElementById('amount').value;
+            if (!amount || amount < 1000) {
+                alert('Please enter a valid amount (minimum UGX1,000)');
+                return;
+            }
+            if (!document.getElementById('accountNumber').value) {
+                alert('Please enter recipient account number');
+                return;
+            }
+
+            document.getElementById('pinAmount').textContent = 'UGX' + parseInt(amount).toLocaleString();
+            document.getElementById('pinModal').classList.add('active');
+            pin = '';
+            updatePinDisplay();
+        }
+
+        // Enter PIN digit
+        function enterPin(num) {
+            if (pin.length < pinLength) {
+                pin += num;
+                updatePinDisplay();
+
+                if (pin.length === pinLength) {
+                    setTimeout(submitPin, 300);
+                }
+            }
+        }
+
+        // Clear PIN
+        function clearPin() {
+            pin = '';
+            updatePinDisplay();
+        }
+
+        // Update PIN display
+        function updatePinDisplay() {
+            for (let i = 1; i <= pinLength; i++) {
+                const dot = document.getElementById('dot' + i);
+                if (i <= pin.length) {
+                    dot.classList.add('filled');
+                } else {
+                    dot.classList.remove('filled');
+                }
+            }
+        }
+
+        // Submit PIN
+        function submitPin() {
+            if (pin.length === pinLength) {
+                document.getElementById('pinModal').classList.remove('active');
+                document.getElementById('successCashback').textContent = '+UGX' + currentCashback.toLocaleString();
+                document.getElementById('successScreen').classList.add('active');
+                pin = '';
+                updatePinDisplay();
+            }
+        }
+
+        // Close success screen
+        function closeSuccess() {
+            document.getElementById('successScreen').classList.remove('active');
+            showDashboard();
+        }
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0,0,0,0.8);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                font-size: 14px;
+                z-index: 3000;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // Countdown timer
+        let countdownSeconds = 6;
+        setInterval(() => {
+            const countdownEl = document.getElementById('countdown');
+            if (countdownEl) {
+                countdownSeconds = countdownSeconds > 1 ? countdownSeconds - 1 : 6;
+                countdownEl.textContent = 'Next: ' + countdownSeconds + 's';
+            }
+        }, 1000);
+
+        // Close modal on outside click
+        document.getElementById('pinModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+                pin = '';
+                updatePinDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
