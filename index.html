@@ -26,7 +26,9 @@
           <div class="header">
             <div class="header-top">
               <div class="logo">👁️ MUKS</div>
-              <div class="notification-icon">🔔</div>
+              <div class="notification-icon">
+                <i class="bx bx-bell"></i>
+              </div>
             </div>
             <div class="balance-card">
               <div class="balance-label">Available Balance</div>
@@ -41,25 +43,30 @@
               </div>
             </div>
           </div>
-          <h1>Hello, Boxicons!</h1>
-          <i class="bx bx-hot"></i>
-          <i class="bx bxs-hot"></i>
-          <i class="bx bxl-facebook-square"></i>
 
           <!-- Quick Actions -->
           <div class="quick-actions">
             <div class="quick-btn" onclick="showToast('Airtime coming soon')">
-              <div class="quick-icon" style="background: #e3f2fd">📱</div>
+              <div class="quick-icon" style="background: #e3f2fd">
+                <i class="bx bx-mobile-alt"></i>
+              </div>
               <span class="quick-label">Airtime</span>
             </div>
+
             <div class="quick-btn" onclick="showToast('Data coming soon')">
-              <div class="quick-icon" style="background: #f3e5f5">📡</div>
+              <div class="quick-icon" style="background: #f3e5f5">
+                <i class="bx bx-wifi"></i>
+              </div>
               <span class="quick-label">Data</span>
             </div>
+
             <div class="quick-btn" onclick="showToast('Bills coming soon')">
-              <div class="quick-icon" style="background: #e8f5e9">⚡</div>
+              <div class="quick-icon" style="background: #e8f5e9">
+                <i class="bx bx-bolt-circle"></i>
+              </div>
               <span class="quick-label">Bills</span>
             </div>
+
             <div
               class="quick-btn"
               style="position: relative"
@@ -71,7 +78,7 @@
                   background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
                 "
               >
-                🎁
+                <i class="bx bx-gift"></i>
               </div>
               <span class="cashback-badge">+UGX500</span>
               <span class="quick-label">Cashback</span>
@@ -81,7 +88,9 @@
           <!-- VIP Tasks -->
           <div class="vip-section" id="dashboard">
             <div class="section-header">
-              <h2 class="section-title">🔥 VIP Tasks</h2>
+              <h2 class="section-title">
+                <i class="bx bxs-hot" style="color: #ff5722"></i> VIP Tasks
+              </h2>
               <span class="countdown" id="countdown">Next: 6s</span>
             </div>
 
@@ -219,21 +228,25 @@
         </div>
 
         <!-- Bottom Navigation -->
+
         <div class="bottom-nav">
           <div class="nav-item active" onclick="switchTab(this, 'home')">
-            <span class="nav-icon">🏠</span>
+            <span class="nav-icon"><i class="bx bxs-home-alt-2"></i></span>
             <span class="nav-label">Home</span>
           </div>
+
           <div class="nav-item" onclick="switchTab(this, 'transfer')">
-            <span class="nav-icon">💸</span>
+            <span class="nav-icon"><i class="bx bx-transfer-alt"></i></span>
             <span class="nav-label">Send</span>
           </div>
+
           <div class="nav-item" onclick="switchTab(this, 'history')">
-            <span class="nav-icon">📊</span>
+            <span class="nav-icon"><i class="bx bx-bar-chart-alt-2"></i></span>
             <span class="nav-label">History</span>
           </div>
+
           <div class="nav-item" onclick="switchTab(this, 'profile')">
-            <span class="nav-icon">👤</span>
+            <span class="nav-icon"><i class="bx bx-user"></i></span>
             <span class="nav-label">Profile</span>
           </div>
         </div>
