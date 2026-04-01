@@ -1,3 +1,15 @@
+:root {
+  --app-base: #3b82f6;
+  --app-shade-200: #2f68c5;
+  --app-shade-400: #234e94;
+  --app-shade-600: #183462;
+  --app-shade-800: #0c1a31;
+  --app-tint-200: #629bf8;
+  --app-tint-400: #89b4fa;
+  --app-tint-600: #b1cdfb;
+  --app-tint-800: #d8e6fd;
+}
+
 * {
   margin: 0;
   padding: 0;
