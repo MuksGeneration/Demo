@@ -1,3 +1,16 @@
+:root {
+  --app-color-100: #d8e6fd;
+  --app-color-200: #b1cdfb;
+  --app-color-300: #89b4fa;
+  --app-color-400: #629bf8;
+  --app-color-500: #3b82f6;
+  --app-color-600: #2f68c5;
+  --app-color-700: #234e94;
+  --app-color-800: #183462;
+  --app-color-900: #0c1a31;
+  --app-color-secondary: #ff5722;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -7,7 +20,8 @@
 body {
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--app-color-200);
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -27,7 +41,7 @@ body {
 .screen {
   width: 100%;
   height: 100%;
-  background: #f8f9fa;
+  background: var(--app-color-100);
   border-radius: 35px;
   overflow: hidden;
   position: relative;
@@ -53,7 +67,12 @@ body {
 /* Header */
 .header {
   padding: 20px 24px 30px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(
+    135deg,
+    var(--app-color-300) 0%,
+    var(--app-color-500) 100%
+  );
+  /* background: var(--app-color-400); */
   color: white;
   border-radius: 0 0 35px 35px;
   position: relative;
@@ -195,8 +214,26 @@ body {
   transition: all 0.3s;
 }
 
-.quick-btn:hover .quick-icon {
+.quick-icon {
+  background: var(--app-color-100);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.quick-icon i {
+  color: var(--app-color-500);
+}
+.quick-btn:hover .quick-icon {
+  background: var(--app-color-300);
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.quick-btn:hover .quick-icon i {
+  color: white;
+}
+
+.quick-btn:hover .quick-label {
+  color: var(--app-color-500);
 }
 
 .quick-label {
@@ -227,13 +264,18 @@ body {
 }
 
 .countdown {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  /* background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); */
+  background: linear-gradient(
+    135deg,
+    var(--app-color-100) 0%,
+    var(--app-color-secondary) 100%
+  );
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 13px;
   font-weight: 700;
-  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+  box-shadow: 0 4px 15px var(--app-color-secondary);
   animation: pulse 2s infinite;
 }
 
@@ -241,11 +283,11 @@ body {
   0%,
   100% {
     transform: scale(1);
-    box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+    box-shadow: 0 4px 15px var(--app-color-secondary);
   }
   50% {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+    box-shadow: 0 6px 20px var(--app-color-secondary);
   }
 }
 
@@ -255,7 +297,7 @@ body {
   padding: 24px;
   margin-bottom: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-  border-left: 5px solid #667eea;
+  border-left: 5px solid var(--app-color-200);
   transition: all 0.3s;
   position: relative;
   overflow: hidden;
@@ -291,7 +333,7 @@ body {
 }
 
 .task-reward {
-  color: #667eea;
+  color: var(--app-color-500);
   font-weight: 800;
   font-size: 18px;
 }
@@ -306,7 +348,7 @@ body {
 .claim-btn {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--app-color-500);
   color: white;
   border: none;
   border-radius: 16px;
@@ -706,7 +748,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background: white;
+  background: var(--app-color-100);
   display: flex;
   justify-content: space-around;
   padding: 18px 0 30px;
@@ -749,13 +791,14 @@ body {
   position: absolute;
   top: -8px;
   right: -8px;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: var(--app-color-secondary);
+  /* background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); */
   color: white;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 11px;
   font-weight: 800;
-  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+  box-shadow: 0 4px 15px var(--app-color-secondary);
   animation: bounce 2s infinite;
   border: 2px solid white;
 }
